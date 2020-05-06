@@ -15,7 +15,36 @@ public class mainClass
 	
 	static int communityCardPosition = 0;
 	
+	static card[] tableCards1 = new card[7];
+	static card[] tableCards2 = new card[7];
 	
+	static int cardQuadPP = 0;
+	static int cardTriplePP = 0;
+	static int cardPairPP = 0;
+	
+	
+	static int numOfPairsCC = 0;
+	static int numOfTriplesCC = 0;
+	
+	static int valOfPair1CC = 0;
+	static int valOfPair2CC = 0;
+	static int valOfPair3CC = 0;
+	static int valOfTripleCC = 0;
+	static int valOfQuadsCC = 0;
+	
+	static int pocketPairValue = 0;
+	static int pairFlag = 0;
+	static int twoPairFlag = 0;
+	static int threeOfAKindFlag = 0;
+	static int pairFlag1 = 0;
+	static int pairFlag2 = 0;
+	static int threeOfAKindFlag1 = 0;
+	static int threeOfAKindFlag2 = 0;
+	
+	static int fullHouseFlag = 0;
+	
+	
+	// ---- Shuffles cards in deck ---- //
 	public static void shuffle(int card[], int n) 
 	    { 
 	        Random rand = new Random(); 
@@ -32,6 +61,7 @@ public class mainClass
 	        }
 	    } 
 	
+	// ---- Create cards in deck ---- //
 	public static void createDeck()
 	{		
 		card aceOfSpades   = new card(1, 1, 'S', 'B', "Ace of Spades");
@@ -147,23 +177,271 @@ public class mainClass
 		deck[51] = kingOfDiamonds;
 	}
 	
-	
-	public static void getNumValues(card[] a, card[] b) 
+	// ---- Check for pocket pairs ---- //
+	public static void pocketPair(card[] a)
 	{
-		System.out.println(a[0].returnValue());
-		System.out.println(a[1].returnValue());	
-		
-		System.out.println(a[0].returnTag());
-		System.out.println(a[1].returnTag());
-		
-		
-		for(int i = 0; i < communityCardPosition; i++)
+		// ---- If both cards in hand have equal number value, get number value ---- //
+		if(a[0].returnValue() == a[1].returnValue())
 		{
-			System.out.println(b[i].returnValue());
-			System.out.println(b[i].returnTag());
+			pocketPairValue = a[0].returnValue();
 		}
 	}
-	 
+	
+	// ---- Check all multiples of cards ---- //
+	public static void multiples(int a, card[] b, card[] c)
+	{
+		int count  = 1;
+		int count2 = 0;
+		int count3 = 0;
+		
+		// ---- If hand has pocket pairs ---- //
+		if(a != 0)
+		{
+			for(int i = 0; i < b.length; i++)
+			{
+				if(a == b[i].returnValue())
+				{
+					count++;
+				}
+			}
+			if(count == 3)
+			{
+				System.out.println("pocketPair: Four of a kind");
+			}
+			else if(count == 2)
+			{
+				System.out.println("pocketPair: Three of a kind");
+			}
+			else if(count == 1)
+			{
+				System.out.println("pocketPair: Pair");
+			}
+			else
+			{
+				System.out.println("pocketPair: No Multiples");
+			}
+		}
+		
+// ---- If hand doesn't have pocket pairs ---- //
+		if(a == 0)
+		{
+			// ---- Check First Card Multiples ---- //
+			for(int i = 0; i < b.length; i++)
+			{
+				if(c[0].returnValue() == b[i].returnValue())
+				{
+					count2++;
+				}
+			}
+			if(count2 == 3)
+			{
+				System.out.println("Card 1: Four of a kind");
+			}
+			else if(count2 == 2)
+			{
+				threeOfAKindFlag++;
+				System.out.println("Card 1: Three of a kind");
+			}
+			else if(count2 == 1)
+			{
+				pairFlag++;
+				System.out.println("Card 1: Pair");
+			}
+			else
+			{
+				System.out.println("Card 1: No Multiples");
+			}
+			
+// ---- Check Second Card Multiples ---- //
+			for(int i = 0; i < b.length; i++)
+			{
+				if(c[1].returnValue() == b[i].returnValue())
+				{
+					count3++;
+				}
+			}
+			if(count3 == 3)
+			{
+				System.out.println("Card 2: Four of a kind");
+			}
+			else if(count3 == 2)
+			{
+				threeOfAKindFlag++;
+				System.out.println("Card 2: Three of a kind");
+			}
+			else if(count3 == 1)
+			{
+				pairFlag++;
+				System.out.println("Card 2: Pair");
+			}
+			else
+			{
+				System.out.println("Card 2: No Multiples");
+			}
+		}
+	}
+	
+  // ---- Check for all multiples of cards in Community Cards ---- //
+	public static void communityCardMultiples(card[] a)
+	{
+		int count = 0;
+		int count2 = 0;
+		int count3 = 0;
+		int count4 = 0;
+		int count5 = 0;
+		
+		int temp = 0;
+		int temp2 = 0;
+		
+		// ---- Check Community Cards for all Pairs ---- //
+		for(int i = 0; i < a.length; i++)
+		{
+			if(a[0].returnValue() == a[i].returnValue())
+			{
+				count++;
+			}
+			if(a[1].returnValue() == a[i].returnValue())
+			{
+				count2++;
+			}
+			if(a[2].returnValue() == a[i].returnValue())
+			{
+				count3++;
+			}
+			if(a[3].returnValue() == a[i].returnValue())
+			{
+				count4++;
+			}
+			if(a[4].returnValue() == a[i].returnValue())
+			{
+				count5++;
+			}			
+		}
+		
+		// ---- If any Community Card Pair(s) exist, get the number value(s) ---- //
+		if(count == 2)
+		{
+			if(valOfPair1CC == 0)
+			{
+				valOfPair1CC = a[0].returnValue();
+			}
+			valOfPair2CC = a[0].returnValue();
+		}
+		if(count2 == 2)
+		{
+			if(valOfPair1CC == 0)
+			{
+				valOfPair1CC = a[1].returnValue();
+			}
+			valOfPair2CC = a[1].returnValue();
+		}
+		if(count3 == 2)
+		{
+			if(valOfPair1CC == 0)
+			{
+				valOfPair1CC = a[2].returnValue();
+			}
+			valOfPair2CC = a[2].returnValue();
+		}
+		if(count4 == 2)
+		{
+			if(valOfPair1CC == 0)
+			{
+				valOfPair1CC = a[3].returnValue();
+			}
+			valOfPair2CC = a[3].returnValue();
+		}
+		if(count5 == 2)
+		{
+			if(valOfPair1CC == 0)
+			{
+				valOfPair1CC = a[4].returnValue();
+			}
+			valOfPair2CC = a[4].returnValue();
+		}
+		
+		// ---- Total number of Pairs in Community Cards ---- //
+		numOfPairsCC = ((count + count2 + count3 + count4 + count5)-5)/2;
+			
+		// ---- If there's a Three-of-a-Kind in the Community Cards ---- //
+		if((count == 3) || (count2 == 3) || (count3 == 3) || (count4 == 3) || (count5 == 3))
+		{
+			// ---- Get number value of Three of a Kind ---- //
+			if(count == 3)
+			{
+				valOfTripleCC = a[0].returnValue();
+			}
+			if(count2 == 3)
+			{
+				valOfTripleCC = a[1].returnValue();
+			}
+			if(count3 == 3)
+			{
+				valOfTripleCC = a[2].returnValue();
+			}
+			if(count4 == 3)
+			{
+				valOfTripleCC = a[3].returnValue();
+			}
+			if(count5 == 3)
+			{
+				valOfTripleCC = a[4].returnValue();
+			}
+			
+			// ---- Find the number values of the other two Community Cards ---- //
+			for(int i = 0; i < a.length; i++)
+			{
+				if(a[i].returnValue() != valOfTripleCC)
+				{
+					if(temp == 0)
+					{
+						temp = a[i].returnValue();
+					}
+					temp2 = a[i].returnValue();						
+				}
+			}
+			
+		}			
+		
+		// ---- Check if the remaining two cards form a pair ---- //
+		if(temp == temp2)
+		{
+			valOfPair3CC = temp;
+		}
+		
+		// ---- If Four-of-a-Kind in the Community Cards, get the number value ---- //
+		if((count == 4) || (count2 == 4) || (count3 == 4) || (count4 == 4) || (count5 == 4))
+		{
+
+			if(count != 1)
+			{
+				valOfQuadsCC = a[0].returnValue();
+			}
+			if(count2 != 1)
+			{
+				valOfQuadsCC = a[1].returnValue();
+			}
+			if(count3 != 1)
+			{
+				valOfQuadsCC = a[2].returnValue();
+			}
+			if(count4 != 1)
+			{
+				valOfQuadsCC = a[3].returnValue();
+			}
+			if(count5 != 1)
+			{
+				valOfQuadsCC = a[4].returnValue();
+			}			
+		}
+	}	 
+	
+	public static void fullHouse()
+	{
+		// --- In the case of Pocket Pairs ---- //
+		
+	}
+	
 	public static void main(String[] args) 
 	{
 		createDeck();
@@ -174,31 +452,37 @@ public class mainClass
         		          26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 
         		          39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51}; 
        
-        //Deal
-        hand1[0] = deck[positions[0]];        
-        hand2[0] = deck[positions[1]];
-        hand1[1] = deck[positions[13]];        
-        hand2[1] = deck[positions[14]];
+        // ---- Deal Player 1 ---- //
+        //hand1[0] = deck[positions[17]];        
+        //hand1[1] = deck[positions[17]];
         
-        communityCards[0] = deck[positions[26]];
-        communityCardPosition++;
-        communityCards[1] = deck[positions[39]];
-        communityCardPosition++;
-        communityCards[2] = deck[positions[27]];
-        communityCardPosition++;
+        // ---- Deal Player 2 ---- //
+        //hand2[0] = deck[positions[0]];
+        //hand2[1] = deck[positions[0]];
         
+        hand1[0] = deck[1];
+        hand1[1] = deck[1];
         
-        getNumValues(hand1, communityCards);
+        hand2[0] = deck[5];
+        hand2[1] = deck[6];
+
+        communityCards[0] = deck[1];  //Flop
+        communityCards[1] = deck[0];  //Flop
+        communityCards[2] = deck[3];  //Flop
+        communityCards[3] = deck[4];  //Turn
+        communityCards[4] = deck[4];  //River
+
+        communityCardMultiples(communityCards);  
         
-/*      //Flop
-        communityCards[0] = deck[positions[4]];
-        communityCards[1] = deck[positions[5]];
-        communityCards[2] = deck[positions[6]];
-        //Turn
-        communityCards[3] = deck[positions[7]];
-        //River
-        communityCards[4] = deck[positions[8]];
-*/        
+        pocketPair(hand1);        
+        multiples(pocketPairValue, communityCards, hand1);
+        
+      
+        pocketPair(hand2);
+        multiples(pocketPairValue, communityCards, hand2);
+        
+      
+        
 	}
 
 }
